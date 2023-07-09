@@ -49,4 +49,4 @@ let NERDTreehijackNetrw = 0 " NERDTreeの代わりにNetrwを使う
 if empty(glob('~/.vim/autoload/plug.vim'))
     silent !curl -fLo ~/.vim/autolaod/plug.vim --create-dirs https://raw.github.com/junegunn/vim-plug/master/plug.vim
     autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
-e
+endif
