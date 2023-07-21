@@ -6,17 +6,24 @@ set shiftwidth=4
 set backspace=2
 colorscheme murphy
 set number
-set wildmenu " Tabによる自動補完を有効にする
+
+set wildmenu
 set wildmode=list:longest,full " 最長マッチまで補完してから自動補完メニューを開く
 set hlsearch
 set clipboard=unnamed,unnamedplus " システムのクリップボードにコピー
 
+" Leaderキーをスペースに変更
+let mapleader = "\<space>"
+
 " vim-plugでプラグインを管理する
 call plug#begin()
-Plug 'tpope/vim-vinegar'
-Plug 'mileszs/ack.vim'
-Plug 'easymotion/vim-easymotion'
+    Plug 'tpope/vim-vinegar'
+    Plug 'mileszs/ack.vim'
+    Plug 'easymotion/vim-easymotion'
+    Plug 'tpope/vim-fugitive'
+    Plug 'christoomey/vim-tmux-navigator'
 call plug#end()
+
 " すべてのファイルについて永続アンドゥを有効にする
 set undofile
 if !isdirectory(expand("$HOME/.vim/undodir"))
@@ -33,10 +40,7 @@ noremap <c-j> <c-w><c-j>
 noremap <c-k> <c-w><c-k>
 noremap <c-l> <c-w><c-l>
 
-let &t_SI = "\<Esc>]50;CursorShape=1\x7" "インサートモードに入る時はカーソルを縦棒にする
-let &t_EI = "\<Esc>]50;CursorShape=0\x7" "インサートモード終了時には、カーソルをブロックに戻す
-
-let NERDTreehijackNetrw = 0 " NERDTreeの代わりにNetrwを使う
+" let NERDTreehijackNetrw = 0 " NERDTreeの代わりにNetrwを使う
 
 " Vim起動時にNERDTreeを開く
 " autocmd VimEnter * NERDTree
@@ -44,9 +48,15 @@ let NERDTreehijackNetrw = 0 " NERDTreeの代わりにNetrwを使う
 " NERDTreeのウィンドウしかない時は自動的に閉じる
 " autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
-
 " vim-plugがまだインストールされていなければインストールする
 if empty(glob('~/.vim/autoload/plug.vim'))
-    silent !curl -fLo ~/.vim/autolaod/plug.vim --create-dirs https://raw.github.com/junegunn/vim-plug/master/plug.vim
+    silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.github.com/junegunn/vim-plug/master/plug.vim
     autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
+if &term =~ 'xterm\|rxvt'
+  " インサートモードに入る時はカーソルを縦棒にする
+  let &t_SI = "\<Esc>[5 q"
+  " ノーマルモードに戻る時には、カーソルをブロックに戻す
+  let &t_EI = "\<Esc>[2 q"
 endif
