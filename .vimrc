@@ -5,6 +5,11 @@ set expandtab
 set shiftwidth=4
 set backspace=2
 colorscheme murphy
+highlight Normal ctermbg=none
+highlight NonText ctermbg=none
+highlight LineNr ctermbg=none
+highlight Folded ctermbg=none
+highlight EndOfBuffer ctermbg=none 
 set number
 
 set wildmenu
@@ -36,12 +41,6 @@ call plug#begin()
     endif
 call plug#end()
 
-" すべてのファイルについて永続アンドゥを有効にする
-set undofile
-if !isdirectory(expand("$HOME/.vim/undodir"))
-    call mkdir(expand("$HOME/.vim/undodir"), "p")
-endif
-set undodir=$HOME/.vim/undodir
 
 packloadall " すべてのプラグインをロードする
 silent! helptags ALL " すべてのプラグイン用にヘルプファイルをロードする
@@ -64,13 +63,6 @@ noremap <c-l> <c-w><c-l>
 if empty(glob('~/.vim/autoload/plug.vim'))
     silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.github.com/junegunn/vim-plug/master/plug.vim
     autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
-endif
-
-if &term =~ 'xterm\|rxvt'
-  " インサートモードに入る時はカーソルを縦棒にする
-  let &t_SI = "\<Esc>[5 q"
-  " ノーマルモードに戻る時には、カーソルをブロックに戻す
-  let &t_EI = "\<Esc>[2 q"
 endif
 
 autocmd FileType defx call s:defx_my_settings()
@@ -170,3 +162,11 @@ call defx#custom#column('git', 'indicators', {
   \ 'Deleted'   : '✖',
   \ 'Unknown'   : '?'
   \ })
+
+if exists('$TMUX')
+  let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
+  let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
+else
+  let &t_SI = "\<Esc>]50;CursorShape=1\x7"
+  let &t_EI = "\<Esc>]50;CursorShape=0\x7"
+endif
