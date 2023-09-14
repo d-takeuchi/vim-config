@@ -10,6 +10,8 @@ highlight NonText ctermbg=none
 highlight LineNr ctermbg=none
 highlight Folded ctermbg=none
 highlight EndOfBuffer ctermbg=none 
+highlight TabLineSel guifg=white guibg=blue
+highlight TabLineSel ctermfg=white ctermbg=blue
 set number
 
 set wildmenu
@@ -74,12 +76,11 @@ nnoremap <silent> <Leader>f :<C-u> Defx <CR>
 autocmd BufWritePost * call defx#redraw()
 autocmd BufEnter * call defx#redraw()
 
+autocmd FileType defx call s:defx_my_settings()
+
 function! s:defx_my_settings() abort
-  " Define mappings
-  nnoremap <silent><buffer><expr><nowait> t
-  \ defx#do_action('multi', ['quit', ['open', 'tab drop']])
   nnoremap <silent><buffer><expr> <CR>
-  \ defx#do_action('open')
+   \ defx#do_action('drop')
   nnoremap <silent><buffer><expr> c
   \ defx#do_action('copy')
   nnoremap <silent><buffer><expr> m
@@ -87,13 +88,15 @@ function! s:defx_my_settings() abort
   nnoremap <silent><buffer><expr> p
   \ defx#do_action('paste')
   nnoremap <silent><buffer><expr> l
-  \ defx#do_action('open')
+  \ defx#do_action('drop')
+  nnoremap <silent><buffer><expr> t
+  \ defx#do_action('open','tabnew')
   nnoremap <silent><buffer><expr> E
-  \ defx#do_action('open', 'vsplit')
+  \ defx#do_action('drop', 'vsplit')
   nnoremap <silent><buffer><expr> P
-  \ defx#do_action('preview')
+  \ defx#do_action('drop', 'pedit')
   nnoremap <silent><buffer><expr> o
-  \ defx#do_action('open_tree', 'toggle')
+  \ defx#do_action('open_or_close_tree')
   nnoremap <silent><buffer><expr> K
   \ defx#do_action('new_directory')
   nnoremap <silent><buffer><expr> N
