@@ -19,6 +19,9 @@ set wildmode=list:longest,full " 最長マッチまで補完してから自動�
 set hlsearch
 set clipboard=unnamed,unnamedplus " システムのクリップボードにコピー
 
+let g:php_cs_fixer_path = '/usr/local/bin/php-cs-fixer'  " php-cs-fixer のパスを指定
+let g:php_cs_fixer_enable_auto = 1
+
 " Leaderキーをスペースに変更
 let mapleader = "\<space>"
 
@@ -33,7 +36,8 @@ call plug#begin()
     Plug 'kristijanhusak/defx-icons'
     Plug 'ryanoasis/vim-devicons'
     Plug 'kristijanhusak/defx-git'
-
+    Plug 'neoclide/coc.nvim', {'branch': 'release'}
+    Plug 'stephpy/vim-php-cs-fixer'
     if has('nvim')
         Plug 'Shougo/defx.nvim', { 'do': ':UpdateRemotePlugins' }
     else
@@ -77,6 +81,8 @@ autocmd BufWritePost * call defx#redraw()
 autocmd BufEnter * call defx#redraw()
 
 autocmd FileType defx call s:defx_my_settings()
+
+autocmd BufWritePost *.php silent! call PhpCsFixerFixFile()
 
 function! s:defx_my_settings() abort
   nnoremap <silent><buffer><expr> <CR>
