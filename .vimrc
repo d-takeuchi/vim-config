@@ -1,9 +1,21 @@
+" =============================================
+" Basic settings
+" =============================================
 syntax on
 filetype plugin indent on
 set autoindent
 set expandtab
 set shiftwidth=4
 set backspace=2
+set number
+set wildmenu
+set wildmode=list:longest,full
+set hlsearch
+set clipboard=unnamed,unnamedplus
+
+" =============================================
+" Colors and Appearance
+" =============================================
 colorscheme murphy
 highlight Normal ctermbg=none
 highlight NonText ctermbg=none
@@ -12,20 +24,19 @@ highlight Folded ctermbg=none
 highlight EndOfBuffer ctermbg=none 
 highlight TabLineSel guifg=white guibg=blue
 highlight TabLineSel ctermfg=white ctermbg=blue
-set number
 
-set wildmenu
-set wildmode=list:longest,full " 最長マッチまで補完してから自動補完メニューを開く
-set hlsearch
-set clipboard=unnamed,unnamedplus " システムのクリップボードにコピー
-
-let g:php_cs_fixer_path = '/usr/local/bin/php-cs-fixer'  " php-cs-fixer のパスを指定
-let g:php_cs_fixer_enable_auto = 1
-
-" Leaderキーをスペースに変更
+" =============================================
+" Key mappings
+" =============================================
 let mapleader = "\<space>"
+noremap <c-h> <c-w><c-h>
+noremap <c-j> <c-w><c-j>
+noremap <c-k> <c-w><c-k>
+noremap <c-l> <c-w><c-l>
 
-" vim-plugでプラグインを管理する
+" =============================================
+" Plugins
+" =============================================
 call plug#begin()
     Plug 'tpope/vim-vinegar'
     Plug 'mileszs/ack.vim'
@@ -47,43 +58,15 @@ call plug#begin()
     endif
 call plug#end()
 
+" =============================================
+" Plugin-specific settings
+" =============================================
+let g:php_cs_fixer_path = '/usr/local/bin/php-cs-fixer'
+let g:php_cs_fixer_enable_auto = 1
 
-packloadall " すべてのプラグインをロードする
-silent! helptags ALL " すべてのプラグイン用にヘルプファイルをロードする
-
-" ctrlキーとhjklで分割されたウィンドウ間を移動する
-noremap <c-h> <c-w><c-h>
-noremap <c-j> <c-w><c-j>
-noremap <c-k> <c-w><c-k>
-noremap <c-l> <c-w><c-l>
-
-" let NERDTreehijackNetrw = 0 " NERDTreeの代わりにNetrwを使う
-
-" Vim起動時にNERDTreeを開く
-" autocmd VimEnter * NERDTree
-
-" NERDTreeのウィンドウしかない時は自動的に閉じる
-" autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-
-" vim-plugがまだインストールされていなければインストールする
-if empty(glob('~/.vim/autoload/plug.vim'))
-    silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.github.com/junegunn/vim-plug/master/plug.vim
-    autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
-endif
-
-autocmd FileType defx call s:defx_my_settings()
-
-autocmd VimEnter * execute 'Defx'
-nnoremap <silent> <Leader>f :<C-u> Defx <CR>
-
-" vimの外でファイル更新・削除が入っても反映されるようにしておく
-autocmd BufWritePost * call defx#redraw()
-autocmd BufEnter * call defx#redraw()
-
-autocmd FileType defx call s:defx_my_settings()
-
-autocmd BufWritePost *.php silent! call PhpCsFixerFixFile()
-
+" =============================================
+" Functions
+" =============================================
 function! s:defx_my_settings() abort
   nnoremap <silent><buffer><expr> <CR>
    \ defx#do_action('drop')
@@ -149,7 +132,33 @@ function! s:defx_my_settings() abort
   nnoremap <silent><buffer><expr> cd
   \ defx#do_action('change_vim_cwd')
 endfunction
+" =============================================
+" Autocommands
+" =============================================
+autocmd FileType defx call s:defx_my_settings()
+autocmd VimEnter * execute 'Defx'
+autocmd BufWritePost *.php silent! call PhpCsFixerFixFile()
+" ... (Other autocmds)
 
+" =============================================
+" Other settings
+" =============================================
+packloadall
+silent! helptags ALL
+
+" vim-plug installation check
+if empty(glob('~/.vim/autoload/plug.vim'))
+    silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.github.com/junegunn/vim-plug/master/plug.vim
+    autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
+" vimの外でファイル更新・削除が入っても反映されるようにしておく
+autocmd BufWritePost * call defx#redraw()
+autocmd BufEnter * call defx#redraw()
+
+autocmd FileType defx call s:defx_my_settings()
+
+" Defx settings
 call defx#custom#option('_', {
   \ 'winwidth': 40,
   \ 'split': 'vertical',
