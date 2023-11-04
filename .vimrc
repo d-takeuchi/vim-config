@@ -55,7 +55,6 @@ call plug#begin()
     Plug 'kristijanhusak/defx-git'
     Plug 'neoclide/coc.nvim', {'branch': 'release'}
     Plug 'stephpy/vim-php-cs-fixer'
-    Plug 'vim-vdebug/vdebug'
     if has('nvim')
         Plug 'Shougo/defx.nvim', { 'do': ':UpdateRemotePlugins' }
     else
@@ -153,9 +152,6 @@ autocmd TermOpen * :resize 10 | :startinsert
 " vimの外でファイル更新・削除が入っても反映されるようにしておく
 autocmd BufWritePost * call defx#redraw()
 autocmd BufEnter * call defx#redraw()
-
-autocmd FileType defx call s:defx_my_settings()
-
 " =============================================
 " Other settings
 " =============================================
@@ -191,19 +187,6 @@ call defx#custom#column('git', 'indicators', {
   \ 'Deleted'   : '✖',
   \ 'Unknown'   : '?'
   \ })
-
-if exists('$TMUX')
-  let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
-  let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
-else
-  let &t_SI = "\<Esc>]50;CursorShape=1\x7"
-  let &t_EI = "\<Esc>]50;CursorShape=0\x7"
-endif
-
-" vim-vdebugの設定
-let g:vdebug_options = {
-\  'port': 9003,
-\}
 
 " useの補完
 nmap <silent><Leader>u      :<C-u>call phpactor#UseAdd()<CR>
