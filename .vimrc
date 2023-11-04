@@ -35,6 +35,11 @@ noremap <c-k> <c-w><c-k>
 noremap <c-l> <c-w><c-l>
 nnoremap <Tab> :wincmd w<CR>
 
+" 新規タブでターミナルモードを起動
+nnoremap <silent> tt <cmd>terminal<CR>
+" 下分割でターミナルモードを起動
+nnoremap <silent> tx <cmd>belowright new<CR><cmd>terminal<CR>
+
 " =============================================
 " Plugins
 " =============================================
@@ -131,13 +136,25 @@ function! s:defx_my_settings() abort
   nnoremap <silent><buffer><expr> l
   \ defx#do_action('drop')
 endfunction
+
 " =============================================
 " Autocommands
 " =============================================
-autocmd FileType defx call s:defx_my_settings()
+
+" Neovimが起動したときにDefx起動
 autocmd VimEnter * execute 'Defx'
+
+autocmd FileType defx call s:defx_my_settings()
 autocmd BufWritePost *.php silent! call PhpCsFixerFixFile()
-" ... (Other autocmds)
+
+" ターミナルを開いたらに常にinsertモードに入る
+autocmd TermOpen * :resize 10 | :startinsert
+
+" vimの外でファイル更新・削除が入っても反映されるようにしておく
+autocmd BufWritePost * call defx#redraw()
+autocmd BufEnter * call defx#redraw()
+
+autocmd FileType defx call s:defx_my_settings()
 
 " =============================================
 " Other settings
@@ -151,15 +168,10 @@ if empty(glob('~/.vim/autoload/plug.vim'))
     autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
-" vimの外でファイル更新・削除が入っても反映されるようにしておく
-autocmd BufWritePost * call defx#redraw()
-autocmd BufEnter * call defx#redraw()
-
-autocmd FileType defx call s:defx_my_settings()
 
 " Defx settings
 call defx#custom#option('_', {
-  \ 'winwidth': 40,
+  \ 'winwidth': 30,
   \ 'split': 'vertical',
   \ 'direction': 'topleft',
   \ 'show_ignored_files': 1,
@@ -216,3 +228,54 @@ nmap <silent><C-w><Leader>o :<C-u>call DefinitionJumpWithPhpactor()<CR>
 " カーソル下のクラスや変数の情報を表示する
 " 他のエディタで、マウスカーソルをおいたときに表示されるポップアップなどに相当
 vmap <silent><Leader>hh     :<C-u>call phpactor#Hover()<CR>
+
+" =============================================
+" ターミナルモードのキーマップ
+" =============================================
+tnoremap <ESC> <C-\><C-n>
+tnoremap <C-W>n       <cmd>new<cr>
+tnoremap <C-W><C-N>   <cmd>new<cr>
+tnoremap <C-W>q       <cmd>quit<cr>
+tnoremap <C-W><C-Q>   <cmd>quit<cr>
+tnoremap <C-W>c       <cmd>close<cr>
+tnoremap <C-W>o       <cmd>only<cr>
+tnoremap <C-W><C-O>   <cmd>only<cr>
+tnoremap <C-W><Down>  <cmd>wincmd j<cr>
+tnoremap <C-W><C-J>   <cmd>wincmd j<cr>
+tnoremap <C-W>j       <cmd>wincmd j<cr>
+tnoremap <C-W><Up>    <cmd>wincmd k<cr>
+tnoremap <C-W><C-K>   <cmd>wincmd k<cr>
+tnoremap <C-W>k       <cmd>wincmd k<cr>
+tnoremap <C-W><Left>  <cmd>wincmd h<cr>
+tnoremap <C-W><C-H>   <cmd>wincmd h<cr>
+tnoremap <C-W><BS>    <cmd>wincmd h<cr>
+tnoremap <C-W>h       <cmd>wincmd h<cr>
+tnoremap <C-W><Right> <cmd>wincmd l<cr>
+tnoremap <C-W><C-L>   <cmd>wincmd l<cr>
+tnoremap <C-W>l       <cmd>wincmd l<cr>
+tnoremap <C-W>w       <cmd>wincmd w<cr>
+tnoremap <C-W><C-W>   <cmd>wincmd w<cr>
+tnoremap <C-W>W       <cmd>wincmd W<cr>
+tnoremap <C-W>t       <cmd>wincmd t<cr>
+tnoremap <C-W><C-T>   <cmd>wincmd t<cr>
+tnoremap <C-W>b       <cmd>wincmd b<cr>
+tnoremap <C-W><C-B>   <cmd>wincmd b<cr>
+tnoremap <C-W>p       <cmd>wincmd p<cr>
+tnoremap <C-W><C-P>   <cmd>wincmd p<cr>
+tnoremap <C-W>P       <cmd>wincmd P<cr>
+tnoremap <C-W>r       <cmd>wincmd r<cr>
+tnoremap <C-W><C-R>   <cmd>wincmd r<cr>
+tnoremap <C-W>R       <cmd>wincmd R<cr>
+tnoremap <C-W>x       <cmd>wincmd x<cr>
+tnoremap <C-W><C-X>   <cmd>wincmd x<cr>
+tnoremap <C-W>K       <cmd>wincmd K<cr>
+tnoremap <C-W>J       <cmd>wincmd J<cr>
+tnoremap <C-W>H       <cmd>wincmd H<cr>
+tnoremap <C-W>L       <cmd>wincmd L<cr>
+tnoremap <C-W>T       <cmd>wincmd T<cr>
+tnoremap <C-W>=       <cmd>wincmd =<cr>
+tnoremap <C-W>-       <cmd>wincmd -<cr>
+tnoremap <C-W>+       <cmd>wincmd +<cr>
+tnoremap <C-W>z       <cmd>pclose<cr>
+tnoremap <C-W><C-Z>   <cmd>pclose<cr>
+
