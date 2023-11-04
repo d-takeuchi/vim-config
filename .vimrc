@@ -33,6 +33,7 @@ noremap <c-h> <c-w><c-h>
 noremap <c-j> <c-w><c-j>
 noremap <c-k> <c-w><c-k>
 noremap <c-l> <c-w><c-l>
+nnoremap <Tab> :wincmd w<CR>
 
 " =============================================
 " Plugins
@@ -70,18 +71,14 @@ let g:php_cs_fixer_enable_auto = 1
 " Functions
 " =============================================
 function! s:defx_my_settings() abort
-  nnoremap <silent><buffer><expr> <CR>
-   \ defx#do_action('drop')
   nnoremap <silent><buffer><expr> c
   \ defx#do_action('copy')
   nnoremap <silent><buffer><expr> m
   \ defx#do_action('move')
   nnoremap <silent><buffer><expr> p
   \ defx#do_action('paste')
-  nnoremap <silent><buffer><expr> l
-  \ defx#do_action('drop')
   nnoremap <silent><buffer><expr> t
-  \ defx#do_action('open','tabnew')
+  \ defx#do_action('drop','tabnew')
   nnoremap <silent><buffer><expr> E
   \ defx#do_action('drop', 'vsplit')
   nnoremap <silent><buffer><expr> P
@@ -113,10 +110,6 @@ function! s:defx_my_settings() abort
   \ defx#do_action('toggle_ignored_files')
   nnoremap <silent><buffer><expr> ;
   \ defx#do_action('repeat')
-  nnoremap <silent><buffer><expr> h
-  \ defx#do_action('cd', ['..'])
-  nnoremap <silent><buffer><expr> ~
-  \ defx#do_action('cd')
   nnoremap <silent><buffer><expr> q
   \ defx#do_action('quit')
   nnoremap <silent><buffer><expr> <Space>
@@ -133,6 +126,10 @@ function! s:defx_my_settings() abort
   \ defx#do_action('print')
   nnoremap <silent><buffer><expr> cd
   \ defx#do_action('change_vim_cwd')
+  nnoremap <silent><buffer><expr> h
+  \ defx#do_action('cd', ['..'])
+  nnoremap <silent><buffer><expr> l
+  \ defx#do_action('drop')
 endfunction
 " =============================================
 " Autocommands
