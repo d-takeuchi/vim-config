@@ -12,6 +12,7 @@ set wildmenu
 set wildmode=list:longest,full
 set hlsearch
 set clipboard=unnamed,unnamedplus
+set nowrap
 
 " =============================================
 " Colors and Appearance
